@@ -18,7 +18,6 @@ java -jar {argument} {spring property} /build/libs/spring-batch-sample.xxxxx.jar
 * Spring Boot 2.6.4
 * H2 Database
 * MySQL
-* myBatis 3
 
 
 ### 사전 준비
@@ -31,7 +30,7 @@ java -jar {argument} {spring property} /build/libs/spring-batch-sample.xxxxx.jar
 ### Features
 
 ---
-* File to Database
-* Database(Select) to Database(Insert)
+* Step Contribution
+* Execution Context
 
 ---
