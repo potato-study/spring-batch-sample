@@ -30,7 +30,10 @@ java -jar {argument} {spring property} /build/libs/spring-batch-sample.xxxxx.jar
 ### Features
 
 ---
-* Step Contribution
-* Execution Context
+* Batch Job - 1
+  * 파일로부터 데이터를 조회한 뒤 데이터베이스에 저장
+* Batch Job - 2
+  * 데이터베이스로부터 데이터를 조회한 뒤 API 서버와 통신
+* Scheduler: Quatz
 
 ---

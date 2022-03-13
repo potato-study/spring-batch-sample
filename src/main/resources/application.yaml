@@ -14,6 +14,13 @@ spring:
       username: sa
       password:
       driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    properties:
+      hiberante.format-sql: true
   batch:
     jdbc:
       initialize-schema: always
