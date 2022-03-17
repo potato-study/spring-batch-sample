@@ -5,17 +5,26 @@ import me.minikuma.batch.chuck.processor.ApiItemProcessor1;
 import me.minikuma.batch.chuck.processor.ApiItemProcessor2;
 import me.minikuma.batch.chuck.processor.ApiItemProcessor3;
 import me.minikuma.batch.classifier.ProcessorClassifier;
+import me.minikuma.batch.classifier.WriterClassifier;
 import me.minikuma.batch.domain.ApiRequestVO;
 import me.minikuma.batch.domain.ProductVO;
 import me.minikuma.batch.partitioner.ProductPartitioner;
+import me.minikuma.batch.service.ApiService1;
+import me.minikuma.batch.service.ApiService2;
+import me.minikuma.batch.service.ApiService3;
+import me.minikuma.batch.writer.ApiItemWriter1;
+import me.minikuma.batch.writer.ApiItemWriter2;
+import me.minikuma.batch.writer.ApiItemWriter3;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
 import org.springframework.batch.item.support.ClassifierCompositeItemProcessor;
+import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +43,9 @@ public class ApiStepConfiguration {
 
     private final StepBuilderFactory stepBuilderFactory;
     private final DataSource dataSource;
+    private final ApiService1 apiService1;
+    private final ApiService2 apiService2;
+    private final ApiService3 apiService3;
 
     private final int chunkSize = 10;
 
@@ -114,5 +126,21 @@ public class ApiStepConfiguration {
         processor.setClassifier(classifier);
 
         return processor;
+    }
+
+    @Bean
+    public ItemWriter<ApiRequestVO> itemWriter() {
+        ClassifierCompositeItemWriter<ApiRequestVO> writer = new ClassifierCompositeItemWriter<>();
+        WriterClassifier<ApiRequestVO, ItemWriter<? super ApiRequestVO>> classifier = new WriterClassifier<>();
+
+        Map<String, ItemWriter<ApiRequestVO>> writerMap = new HashMap<>();
+        writerMap.put("1", new ApiItemWriter1(apiService1));
+        writerMap.put("2", new ApiItemWriter2(apiService2));
+        writerMap.put("3", new ApiItemWriter3(apiService3));
+
+        classifier.setWriterMap(writerMap);
+        writer.setClassifier(classifier);
+
+        return writer;
     }
 }
